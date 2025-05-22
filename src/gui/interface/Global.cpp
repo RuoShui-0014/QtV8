@@ -81,9 +81,9 @@ class PromiseTask : public v8::Task {
   ~PromiseTask() override = default;
 
   void Run() override {
-    // v8::HandleScope handle_scope(m_isolate);
+    v8::HandleScope handle_scope(m_isolate);
     v8::Local<v8::Context> context = m_context.Get(m_isolate);
-    // v8::Context::Scope context_scope(context);
+    v8::Context::Scope context_scope(context);
 
     if (m_resolve) {
       m_resolver.Get(m_isolate)->Resolve(
