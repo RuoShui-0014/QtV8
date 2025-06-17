@@ -16,20 +16,18 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
+add_definitions(
+        -DV8_COMPRESS_POINTERS
+        -DV8_ENABLE_SANDBOX
+        -D_ITERATOR_DEBUG_LEVEL=0
+        -D_WIN32_WINNT=0x0601
+)
+
 if (MSVC)
     add_compile_options(
             /MT
-            /EHsc
-            /Zc:__cplusplus
     )
 endif ()
-
-add_definitions(
-    -DV8_COMPRESS_POINTERS
-    -DV8_ENABLE_SANDBOX
-    -D_ITERATOR_DEBUG_LEVEL=0
-    -D_WIN32_WINNT=0x0601
-)
 
 include_directories(${ROOT_DIR})
 include_directories(${BOOST_DIR})
@@ -48,12 +46,13 @@ find_package(Qt6 COMPONENTS
         REQUIRED)
 
 add_executable(QtV8
+        ${ROOT_DIR}/src/gui/main.cpp
+
         ${ROOT_DIR}/src/v8/V8Isolate.cpp
         ${ROOT_DIR}/src/v8/V8Isolate.h
         ${ROOT_DIR}/src/v8/V8Context.cpp
         ${ROOT_DIR}/src/v8/V8Context.h
 
-        ${ROOT_DIR}/src/gui/main.cpp
         ${ROOT_DIR}/src/gui/QtV8GUI.cpp
         ${ROOT_DIR}/src/gui/QtV8GUI.h
         ${ROOT_DIR}/src/gui/QtV8GUI.ui
@@ -62,19 +61,20 @@ add_executable(QtV8
         ${ROOT_DIR}/src/gui/QtV8Runner.cpp
         ${ROOT_DIR}/src/gui/QtV8Runner.h
         ${ROOT_DIR}/src/gui/QtV8ConsoleDelegate.h
+
+        ${ROOT_DIR}/src/gui/interface/Global.cpp
+        ${ROOT_DIR}/src/gui/interface/Global.h
+
         ${ROOT_DIR}/src/gui/inspector/V8InspectorClient.cpp
         ${ROOT_DIR}/src/gui/inspector/V8InspectorClient.h
         ${ROOT_DIR}/src/gui/inspector/V8InspectorChannel.cpp
         ${ROOT_DIR}/src/gui/inspector/V8InspectorChannel.h
-        ${ROOT_DIR}/src/gui/interface/Global.cpp
-        ${ROOT_DIR}/src/gui/interface/Global.h
 
         ${ROOT_DIR}/src/gui/inspector/DevToolsSession.cpp
         ${ROOT_DIR}/src/gui/inspector/DevToolsSession.h
         ${ROOT_DIR}/src/gui/inspector/DevToolsAgent.cpp
         ${ROOT_DIR}/src/gui/inspector/DevToolsAgent.h
-        interface/Utils.cpp
-        interface/Utils.h
+        ${ROOT_DIR}/src/gui/inspector/Utils.h
 )
 
 target_link_libraries(QtV8
