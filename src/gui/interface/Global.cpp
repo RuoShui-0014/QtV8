@@ -1,13 +1,10 @@
 #include "Global.h"
 
-#include <v8.h>
-
 #include <QFile>
-#include <QRunnable>
 #include <QString>
 #include <QThreadPool>
 
-#include "src/v8/V8Isolate.h"
+#include "src/v8/V8Initializator.h"
 
 namespace rs::binding {
 
@@ -195,7 +192,7 @@ v8::Local<v8::Template> Global::GetInterface(v8::Isolate* isolate) {
       v8::FunctionTemplate::New(isolate, ConstructorCallback);
   interface->SetClassName(v8::String::NewFromUtf8Literal(isolate, "Global"));
   interface->SetLength(0);
-  return interface.As<v8::Template>();
+  return interface;
 }
 
 void Global::InstallInterface(v8::Isolate* isolate,

@@ -1,6 +1,6 @@
 #include "V8InspectorClient.h"
 
-#include "src/v8/V8Isolate.h"
+#include "src/v8/V8Initializator.h"
 #include "include/libplatform/libplatform.h"
 #include "utils.h"
 

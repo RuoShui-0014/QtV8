@@ -1,6 +1,6 @@
 #pragma once
 
-#include <v8-inspector.h>
+#include <include/v8-inspector.h>
 #include <queue>
 #include "V8InspectorChannel.h"
 #include <boost/beast/core.hpp>

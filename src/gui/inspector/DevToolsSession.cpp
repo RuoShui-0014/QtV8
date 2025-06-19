@@ -2,9 +2,9 @@
 
 namespace rs {
 
-DevToolsSession::DevToolsSession() {}
+DevToolsSession::DevToolsSession() = default;
 
-DevToolsSession::~DevToolsSession() {}
+DevToolsSession::~DevToolsSession() = default;
 
 void DevToolsSession::ConnectToV8(v8_inspector::V8Inspector* inspector,
                                   int context_group_id) {

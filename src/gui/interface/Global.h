@@ -1,8 +1,8 @@
 #pragma once
 
 #include <include/cppgc/garbage-collected.h>
-#include <v8-local-handle.h>
-#include <v8-template.h>
+#include <include/v8-local-handle.h>
+#include <include/v8-template.h>
 
 namespace rs::binding {
 

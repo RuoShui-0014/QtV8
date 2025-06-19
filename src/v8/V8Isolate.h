@@ -1,37 +1,14 @@
 #pragma once
 
-#include <v8.h>
+#include <include/v8.h>
 
-#include "src/v8/V8Context.h"
+#include "V8Context.h"
+#include "V8PerIsolateData.h"
 
 namespace rs {
-/* init and end v8 engine */
-class V8Initializer {
- public:
-  static V8Initializer& GetInstance();
-
-  ~V8Initializer();
-
-  void Init();
-
-  static void SetV8Flag(const char* flag);
-
-  [[nodiscard]] bool Inited() const;
-
-  [[nodiscard]] v8::Platform* GetPlatform() const;
-
-  std::shared_ptr<v8::TaskRunner> GetTaskRunner(v8::Isolate* isolate);
-
- private:
-  V8Initializer();
-
-  bool m_inited{false};
-  std::unique_ptr<v8::Platform> m_platform;
-};
 
 class V8Isolate {
  public:
-
   class Scope {
    public:
     explicit Scope(v8::Isolate* isolate)
@@ -57,10 +34,11 @@ class V8Isolate {
   void NotifyGC() const { m_isolate->LowMemoryNotification(); }
 
  private:
+  std::unique_ptr<v8::CppHeap> m_cpp_heap;
   v8::Isolate::CreateParams m_create_params;
-  v8::Isolate* m_isolate{nullptr};
+  v8::Isolate* m_isolate;
+  std::unique_ptr<V8PerIsolateData> m_per_isolate_data;
   std::unique_ptr<Scope> m_v8isolate_scope;
   std::shared_ptr<V8Context> m_default_context;
-  std::unique_ptr<v8::CppHeap> m_cpp_heap;
 };
 }  // namespace rs

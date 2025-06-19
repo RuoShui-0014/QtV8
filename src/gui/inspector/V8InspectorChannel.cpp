@@ -1,7 +1,3 @@
-//
-// Created by RuoShui on 25-3-22.
-//
-
 #include "V8InspectorChannel.h"
 #include "utils.h"
 

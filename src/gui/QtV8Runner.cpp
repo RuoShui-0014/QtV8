@@ -1,7 +1,7 @@
 #include "src/gui/QtV8Runner.h"
 
 #include <ui_QtV8GUI.h>
-
+#include "src/v8/V8Initializator.h"
 #include "include/libplatform/libplatform.h"
 #include "interface/Global.h"
 #include "src/debug/debug-interface.h"

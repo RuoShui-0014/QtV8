@@ -1,6 +1,3 @@
-//
-// Created by Administrator on 25-1-30.
-//
 #include "V8Context.h"
 
 #include "V8Isolate.h"

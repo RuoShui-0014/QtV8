@@ -1,6 +1,6 @@
 #pragma once
 
-#include <v8-inspector.h>
+#include <include/v8-inspector.h>
 
 namespace rs {
 class DevToolsSession : public v8_inspector::V8Inspector::Channel {

@@ -48,8 +48,12 @@ find_package(Qt6 COMPONENTS
 add_executable(QtV8
         ${ROOT_DIR}/src/gui/main.cpp
 
+        ${ROOT_DIR}/src/v8/V8Initializator.cpp
+        ${ROOT_DIR}/src/v8/V8Initializator.h
         ${ROOT_DIR}/src/v8/V8Isolate.cpp
         ${ROOT_DIR}/src/v8/V8Isolate.h
+        ${ROOT_DIR}/src/v8/V8PerIsolateData.cpp
+        ${ROOT_DIR}/src/v8/V8PerIsolateData.h
         ${ROOT_DIR}/src/v8/V8Context.cpp
         ${ROOT_DIR}/src/v8/V8Context.h
 
