@@ -11,7 +11,6 @@ class Global : public cppgc::GarbageCollected<Global> {
   explicit Global();
   ~Global();
 
- public:
   static v8::Local<v8::Template> GetInterface(v8::Isolate* isolate);
   static void InstallInterface(v8::Isolate* isolate,
                                v8::Local<v8::Template> interface);

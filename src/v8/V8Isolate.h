@@ -24,7 +24,6 @@ class V8Isolate {
   ~V8Isolate();
 
   void InitCppgc();
-
   v8::Isolate* GetIsolate();
 
   void SetDefaultContext(v8::Local<v8::ObjectTemplate> global_template);
@@ -35,7 +34,7 @@ class V8Isolate {
 
  private:
   std::unique_ptr<v8::CppHeap> m_cpp_heap;
-  v8::Isolate::CreateParams m_create_params;
+  std::unique_ptr<v8::Isolate::CreateParams> m_create_params;
   v8::Isolate* m_isolate;
   std::unique_ptr<V8PerIsolateData> m_per_isolate_data;
   std::unique_ptr<Scope> m_v8isolate_scope;
