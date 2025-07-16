@@ -4,6 +4,7 @@
 #include "V8Initializator.h"
 #include "include/libplatform/libplatform.h"
 #include "include/v8-cppgc.h"
+#include "../module/per_isolate_data.h"
 
 namespace rs {
 
@@ -22,9 +23,9 @@ V8Isolate::V8Isolate() {
 
   m_isolate = v8::Isolate::Allocate();
   v8::Isolate::Initialize(m_isolate, *m_create_params);
-  m_per_isolate_data = std::make_unique<V8PerIsolateData>(m_isolate);
-
   m_v8isolate_scope = std::make_unique<Scope>(m_isolate);
+
+  m_per_isolate_data = std::make_unique<PerIsolateData>(m_isolate);
   m_default_context = std::make_unique<V8Context>(this);
 }
 

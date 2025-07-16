@@ -1,5 +1,7 @@
 #include "DevToolsAgent.h"
 
+#include "DevToolsSession.h"
+
 namespace rs {
 
 DevToolsAgent::DevToolsAgent(v8::Isolate* isolate) : m_isolate(isolate) {}

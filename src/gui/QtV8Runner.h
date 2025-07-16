@@ -5,13 +5,14 @@
 #include <QObject>
 #include <atomic>
 #include <condition_variable>
-
 #include "inspector/V8InspectorClient.h"
-#include "src/v8/V8Isolate.h"
 
 namespace rs {
+
+class V8Isolate;
 class QtV8GUI;
 class QtV8ConsoleDelegate;
+class V8InspectorClient;
 
 class ScriptTask : public v8::Task {
  public:

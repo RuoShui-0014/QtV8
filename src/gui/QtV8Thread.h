@@ -5,10 +5,10 @@
 
 #include <QThread>
 
-#include "src/gui/QtV8Runner.h"
-
 namespace rs {
+
 class QtV8GUI;
+class QtV8Runner;
 
 class QtV8Thread : public QThread {
   Q_OBJECT
@@ -23,10 +23,10 @@ public:
 
   void EnableDebug();
 
-  QtV8Runner* GetRunner() { return &m_runner; }
+  QtV8Runner* GetRunner();
 
 private:
   QtV8GUI* m_gui{};
-  QtV8Runner m_runner;
+  std::unique_ptr<QtV8Runner> m_runner;
 };
 } // namespace rs

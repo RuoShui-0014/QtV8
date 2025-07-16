@@ -5,8 +5,10 @@
 
 #include "src/debug/interface-types.h"
 #include "src/gui/QtV8Runner.h"
+#include "src/v8/V8Isolate.h"
 
 namespace rs {
+
 class QtV8ConsoleDelegate : public v8::debug::ConsoleDelegate {
 public:
   explicit QtV8ConsoleDelegate(QtV8Runner* runner) : m_runner(runner) {

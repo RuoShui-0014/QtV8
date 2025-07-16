@@ -1,11 +1,11 @@
 #pragma once
 
-#include <include/v8.h>
-
-#include "V8Context.h"
-#include "V8PerIsolateData.h"
+#include <v8.h>
 
 namespace rs {
+
+class PerIsolateData;
+class V8Context;
 
 class V8Isolate {
  public:
@@ -36,8 +36,8 @@ class V8Isolate {
   std::unique_ptr<v8::CppHeap> m_cpp_heap;
   std::unique_ptr<v8::Isolate::CreateParams> m_create_params;
   v8::Isolate* m_isolate;
-  std::unique_ptr<V8PerIsolateData> m_per_isolate_data;
   std::unique_ptr<Scope> m_v8isolate_scope;
+  std::unique_ptr<PerIsolateData> m_per_isolate_data;
   std::shared_ptr<V8Context> m_default_context;
 };
 }  // namespace rs

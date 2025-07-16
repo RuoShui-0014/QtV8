@@ -4,9 +4,9 @@
 
 #include <memory>
 
-#include "DevToolsSession.h"
-
 namespace rs {
+
+class DevToolsSession;
 
 class DevToolsAgent : public v8_inspector::V8InspectorClient {
  public:

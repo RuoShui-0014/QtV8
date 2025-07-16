@@ -1,12 +1,16 @@
 #include "src/gui/QtV8Runner.h"
 
 #include <ui_QtV8GUI.h>
-#include "src/v8/V8Initializator.h"
+
 #include "include/libplatform/libplatform.h"
 #include "interface/Global.h"
 #include "src/debug/debug-interface.h"
 #include "src/gui/QtV8ConsoleDelegate.h"
 #include "src/gui/QtV8GUI.h"
+#include "src/interface/local_dom_window.h"
+#include "src/v8/V8Isolate.h"
+#include "src/v8/V8Context.h"
+#include "src/v8/V8Initializator.h"
 
 static int index = 1;
 
@@ -60,13 +64,16 @@ QtV8Runner::~QtV8Runner() {
 
 void QtV8Runner::Init() {
   V8Initializer::SetV8Flag("--expose-gc");
-  m_v8isolate = std::make_unique<V8Isolate>();
 
+  m_v8isolate = std::make_unique<V8Isolate>();
   v8::Isolate* isolate = m_v8isolate->GetIsolate();
-  v8::Local<v8::Template> interface = binding::Global::GetInterface(isolate);
-  binding::Global::InstallInterface(isolate, interface);
-  m_v8isolate->SetDefaultContext(
-      interface.As<v8::FunctionTemplate>()->InstanceTemplate());
+
+  v8::Local<v8::ObjectTemplate> object_template =
+      V8Window::GetWrapperTypeInfo()
+          ->GetV8ClassTemplate(isolate)
+          .As<v8::FunctionTemplate>()
+          ->InstanceTemplate();
+  m_v8isolate->SetDefaultContext(object_template);
 
   m_consoleDelegate = std::make_unique<QtV8ConsoleDelegate>(this);
   v8::debug::SetConsoleDelegate(m_v8isolate->GetIsolate(),
@@ -81,15 +88,12 @@ void QtV8Runner::End() {
 
 void QtV8Runner::RunLoop() {
   v8::Isolate* isolate = m_v8isolate->GetIsolate();
+  v8::Locker locker(isolate);
   v8::HandleScope handle_scope(isolate);
   v8::Context::Scope context_scope(
       m_v8isolate->GetDefaultV8Context()->GetContext());
 
   while (!m_quit) {
-    QCoreApplication::processEvents();
-    if (m_debug) {
-      m_inspectorClient->dispatchProtocolMessage();
-    }
     for (bool success = true; success;) {
       success = v8::platform::PumpMessageLoop(
           V8Initializer::GetInstance().GetPlatform(), isolate);
@@ -97,9 +101,11 @@ void QtV8Runner::RunLoop() {
     if (isolate->HasPendingBackgroundTasks()) {
       continue;
     }
+    QCoreApplication::processEvents();
+
     {
       std::unique_lock lock(m_mutex);
-      m_runCondition.wait_for(lock, std::chrono::milliseconds(10));
+      m_runCondition.wait_for(lock, std::chrono::milliseconds(5));
     }
   }
 }

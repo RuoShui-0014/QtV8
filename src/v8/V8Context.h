@@ -1,6 +1,6 @@
 #pragma once
 
-#include <include/v8.h>
+#include <v8.h>
 
 namespace rs {
 class V8Isolate;
@@ -14,7 +14,6 @@ public:
   [[nodiscard]] v8::Local<v8::Context> GetContext() const;
   void SetContext(v8::Local<v8::ObjectTemplate> global_template);
 
-  [[nodiscard]] char* QtRunCode(const char* code);
   [[nodiscard]] v8::Local<v8::Value> RunCode(const char* code);
 
   void Release() const;
