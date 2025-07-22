@@ -9,8 +9,7 @@ void ScriptWrappable::Wrap(v8::Local<v8::Object> object,
   assert(wrappable->wrapper_.IsEmpty());
 
   v8::Isolate* isolate = object->GetIsolate();
-  v8::Object::Wrap(isolate, object, wrappable,
-                   static_cast<v8::CppHeapPointerTag>(Tag::kWrappable));
+  object->SetAlignedPointerInInternalField(1, wrappable);
   wrappable->wrapper_.Reset(isolate, object);
 }
 

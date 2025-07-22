@@ -13,22 +13,13 @@ namespace rs {
 
 class ScriptWrappable : public cppgc::GarbageCollected<ScriptWrappable> {
  public:
-  enum class Tag : uint16_t {
-    kType = v8::CppHeapPointerTag::kDefaultTag,
-    kWrappable,
-  };
-
   virtual ~ScriptWrappable();
   static void Wrap(v8::Local<v8::Object> object, ScriptWrappable* wrappable);
 
   template <class T>
   static T* Unwrap(v8::Local<v8::Object> object) {
     assert(!object.IsEmpty());
-
-    v8::Isolate* isolate = object->GetIsolate();
-    return v8::Object::Unwrap<
-        static_cast<v8::CppHeapPointerTag>(Tag::kWrappable), T>(isolate,
-                                                                object);
+    return static_cast<T*>(object->GetAlignedPointerFromInternalField(1));
   }
 
   v8::Local<v8::Object> V8Object(v8::Isolate* isolate) {
@@ -72,4 +63,4 @@ T* MakeCppGcObject(Args&&... args) {
   }
 }
 
-}  // namespace svm
+}  // namespace rs

@@ -2,15 +2,17 @@
 
 #include <ui_QtV8GUI.h>
 
+#include <thread>
+
 #include "include/libplatform/libplatform.h"
 #include "interface/Global.h"
 #include "src/debug/debug-interface.h"
 #include "src/gui/QtV8ConsoleDelegate.h"
 #include "src/gui/QtV8GUI.h"
 #include "src/interface/local_dom_window.h"
-#include "src/v8/V8Isolate.h"
 #include "src/v8/V8Context.h"
 #include "src/v8/V8Initializator.h"
+#include "src/v8/V8Isolate.h"
 
 static int index = 1;
 

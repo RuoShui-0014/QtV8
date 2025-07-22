@@ -17,9 +17,13 @@ V8Isolate::V8Isolate() {
   InitCppgc();
 
   m_create_params = std::make_unique<v8::Isolate::CreateParams>();
-  m_create_params->cpp_heap = m_cpp_heap.get();
   m_create_params->array_buffer_allocator =
       v8::ArrayBuffer::Allocator::NewDefaultAllocator();
+
+  m_create_params->cpp_heap = m_cpp_heap.get();
+  m_create_params->embedder_wrapper_type_index = 0;
+  m_create_params->embedder_wrapper_object_index = 1;
+
 
   m_isolate = v8::Isolate::Allocate();
   v8::Isolate::Initialize(m_isolate, *m_create_params);

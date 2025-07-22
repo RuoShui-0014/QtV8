@@ -1,5 +1,7 @@
 #include "local_dom_window.h"
 
+#include <iostream>
+
 #include "../module/utils.h"
 
 namespace rs {
@@ -46,11 +48,10 @@ void WindowExposedConstructCallback(
       info.GetIsolate(), info.Holder(), V8Window::GetWrapperTypeInfo()));
 }
 
-LocalDOMWindow::LocalDOMWindow() {
-
-}
-LocalDOMWindow::~LocalDOMWindow() {
-
+LocalDOMWindow::LocalDOMWindow() = default;
+LocalDOMWindow::~LocalDOMWindow() = default;
+void LocalDOMWindow::Trace(cppgc::Visitor* visitor) const {
+  ScriptWrappable::Trace(visitor);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////

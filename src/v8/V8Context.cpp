@@ -48,7 +48,7 @@ void V8Context::SetContext(v8::Local<v8::ObjectTemplate> global_template) {
   m_context = v8::Global<v8::Context>(
       GetIsolate(),
       v8::Context::New(GetIsolate(), nullptr, global_template, {}));
-  // LocalDOMWindow* window = MakeCppGcObject<GC::kCurrent, LocalDOMWindow>();
+  LocalDOMWindow* window = MakeCppGcObject<GC::kCurrent, LocalDOMWindow>();
   // ScriptWrappable::Wrap(m_context.Get(m_v8Isolate->GetIsolate())->Global(),
   //                       window);
 }

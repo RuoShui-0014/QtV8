@@ -15,6 +15,8 @@ class LocalDOMWindow : public ScriptWrappable {
   ~LocalDOMWindow() override;
 
   LocalDOMWindow* window() { return this; }
+
+  void Trace(cppgc::Visitor* visitor) const override;
 };
 
 class V8Window {
