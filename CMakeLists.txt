@@ -16,22 +16,33 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
-add_definitions(
-	-DV8_COMPRESS_POINTERS
-	-DV8_ENABLE_SANDBOX
-	-D_ITERATOR_DEBUG_LEVEL=0
-	-D_WIN32_WINNT=0x0601
+add_executable(QtV8)
+target_compile_definitions(QtV8 PRIVATE
+	V8_COMPRESS_POINTERS
+	V8_ENABLE_SANDBOX
+	_ITERATOR_DEBUG_LEVEL=0
+	_WIN32_WINNT=0x0601
 )
 
+if (MSVC AND CMAKE_BUILD_TYPE MATCHES "Release")
+	target_compile_options(QtV8 PRIVATE /Zi)  # 生成调试信息到单独 PDB
+	target_compile_options(QtV8 PRIVATE
+		/O2      # 最大速度优化
+		/Ob2     # 激进内联
+		/GL      # 全程序优化
+	)
+	target_link_options(QtV8 PRIVATE /DEBUG /OPT:REF /OPT:ICF)
+endif ()
+
 if (MSVC)
-	add_compile_options(
+	target_compile_options(QtV8 PRIVATE
 		/MT /EHsc
 		-Wno-unused-result
 		-Wno-deprecated-literal-operator
 	)
 else ()
 	# 通用GCC/Clang/Intel编译器选项
-	add_compile_options(
+	target_compile_options(QtV8 PRIVATE
 		$<$<OR:$<CXX_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:Intel>>:
 		-Wall
 		-Wextra
@@ -41,12 +52,11 @@ else ()
 
 	# 静态链接选项（适用于GCC/Clang）
 	if (BUILD_STATIC)
-		add_compile_options(-static)
-		add_link_options(-static)
+		target_compile_options(QtV8 PRIVATE -static)
+		target_link_options(QtV8 PRIVATE -static)
 
-		# Windows MinGW需要额外系统库
 		if (MINGW)
-			add_link_options(
+			target_link_options(QtV8 PRIVATE
 				-static-libgcc
 				-static-libstdc++
 				-Wl,--whole-archive -lwinpthread -Wl,--no-whole-archive
@@ -57,26 +67,26 @@ endif ()
 
 # 苹果平台特殊处理
 if (APPLE)
-	add_compile_options(-stdlib=libc++)
-	add_link_options(-stdlib=libc++)
+	target_compile_options(QtV8 PRIVATE -stdlib=libc++)
+	target_link_options(QtV8 PRIVATE -stdlib=libc++)
 endif ()
 
 # Linux平台特殊处理
 if (LINUX)
-	add_compile_options(-fPIC)  # 位置无关代码
+	target_compile_options(QtV8 PRIVATE -fPIC)  # 位置无关代码
 endif ()
 
-include_directories(${ROOT_DIR})
-include_directories(${BOOST_DIR})
-include_directories(${V8_SRC_DIR})
-include_directories(${V8_SRC_DIR}/include)
-include_directories(${V8_SRC_DIR}/include/libplatform)
+target_include_directories(QtV8 PRIVATE ${ROOT_DIR})
+target_include_directories(QtV8 PRIVATE ${BOOST_DIR})
+target_include_directories(QtV8 PRIVATE ${V8_SRC_DIR})
+target_include_directories(QtV8 PRIVATE ${V8_SRC_DIR}/include)
+target_include_directories(QtV8 PRIVATE ${V8_SRC_DIR}/include/libplatform)
 
-link_directories(${V8_SRC_DIR}/out/clang_lib_x64_release/obj)
+target_link_directories(QtV8 PRIVATE ${V8_SRC_DIR}/out/clang_lib_x64_release/obj)
 
 find_package(Qt6 REQUIRED COMPONENTS Core Gui Widgets)
 
-add_executable(QtV8
+target_sources(QtV8 PRIVATE
 	${ROOT_DIR}/src/gui/main.cpp
 
 	${ROOT_DIR}/src/v8/V8Initializator.cpp
@@ -120,7 +130,7 @@ add_executable(QtV8
 	${ROOT_DIR}/src/gui/inspector/Utils.h
 )
 
-target_link_libraries(QtV8
+target_link_libraries(QtV8 PRIVATE
 	winmm dbghelp
 	v8_monolith
 

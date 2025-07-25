@@ -1,7 +1,5 @@
 #include "local_dom_window.h"
 
-#include <iostream>
-
 #include "../module/utils.h"
 
 namespace rs {
